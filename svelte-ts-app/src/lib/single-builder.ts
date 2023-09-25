@@ -22,39 +22,31 @@ export function initCells(cryptogram : Cryptogram){
             }
         }
     }
-    return cells
+    return cells as Cell[][]
 }
 
-export function generatePuzzle(WORDS : Word[], cryptogram : Cryptogram){
-    var wordsToPlace = WORDS;
+export function generatePuzzle(WORDS : Word[], cryptogram : Cryptogram, weights : number[]){
+    let wordsToPlace = Object.assign([] as Word[], WORDS);
     while(wordsToPlace.length != 0){ 
-        let bestPossiblePlacement = findBestPossiblePlacement(wordsToPlace, cryptogram);
+        let bestPossiblePlacement = findBestPossiblePlacement(WORDS, wordsToPlace, cryptogram, weights);
         cryptogram = confirmPlacement(bestPossiblePlacement, cryptogram);
-        console.log("Best word found: ", bestPossiblePlacement)
         wordsToPlace.splice(wordsToPlace.findIndex((w) => w.id == bestPossiblePlacement.word.id), 1)
-
-        console.log("REMAINING WORDS: ")
-        for(let i = 0; i < wordsToPlace.length; i++){
-            
-            console.log(wordsToPlace[i])
-        }
-        console.log("---------------")
     }
     return cryptogram
 }
 
-function findBestPossiblePlacement(wordsToPlace : Word[], cryptogram : Cryptogram){
+function findBestPossiblePlacement(WORDS : Word[], wordsToPlace : Word[], cryptogram : Cryptogram, weights : number[]){
     
     let bestPossiblePlacement : Placement = {word: {} as Word, start: {} as Cell, orientation :"", score : -1};
     let allPossibleWordPlacements : {[key : number] : Placement[][]} = {};
     
     for(let i = 0; i < wordsToPlace.length; i++){
-        let placements = findPossiblePlacements(wordsToPlace[i], cryptogram);
+        let placements = findPossiblePlacements(wordsToPlace[i], cryptogram, weights);
         allPossibleWordPlacements[wordsToPlace[i].id] = placements;
         let currBestPlacement : Placement;
-        console.log(placements);
+        
         if (placements[0].length == 0 && placements[1].length == 0){
-                console.log("Could not place word: ", wordsToPlace[i])
+                WORDS[WORDS.findIndex((w) => w.id == wordsToPlace[i].id)].canPlace = false;
                 continue;
         }
         else if(placements[0].length > 0 && placements[1].length == 0) currBestPlacement = placements[0][0]
@@ -73,11 +65,10 @@ function confirmPlacement(placement : Placement, cryptogram : Cryptogram){
     
     // Check if the word touches the edge of the puzzle, where right & bottom are dependent on the word's orientation
     let onLeftEdge = start.x - 1 < 0;
-    let onRightEdge = orientation == 'h'? start.x + word.length_total + 1 > maxX : start.x + 1 > maxX;
+    let onRightEdge = orientation == 'h'? start.x + word.length_total> maxX : start.x + 1 > maxX;
     let onTopEdge = start.y - 1 < 0;
-    let onBottomEdge = orientation == 'h'? start.y + 1 > maxY : start.y + word.length_total + 1 > maxY;
+    let onBottomEdge = orientation == 'h'? start.y + 1 > maxY : start.y + word.length_total> maxY;
 
-    console.log("reached confirmation")
     // Horizontal explained.
     if(orientation == 'h'){
         
@@ -143,20 +134,20 @@ function blockFutureVertical(cell : Cell){
         // Else content already is "-" or is another letter: no action needed.
     }
 }
-function findPossiblePlacements(word : Word, cryptogram : Cryptogram){
+function findPossiblePlacements(word : Word, cryptogram : Cryptogram, weights : number[]){
     let grid = cryptogram.cells;
-    let word_length = word.length_total;
+    let wordLength = word.length_total;
     let horizontalWordPlacements : Placement[] = [];
     let verticalWordPlacements : Placement[] = [];
     let returnPlacements : Placement[][] = [];
     let h_done = false, v_done = false;
     
     for(let x = 0; x < cryptogram.width; x++){
-        h_done = x + word_length > cryptogram.width;
+        h_done = x + wordLength > cryptogram.width;
         for(let y = 0; y < cryptogram.height; y++){
-            v_done = y + word_length > cryptogram.height;
+            v_done = y + wordLength > cryptogram.height;
             //Don't check any further squares if we've reached the edge in both directions
-            if((h_done) && (v_done)) break;
+            if((h_done) && (v_done)) continue;
             //Do check if at least one of the orientations is still possible            
             else{
                 var h_fits = 0
@@ -179,7 +170,7 @@ function findPossiblePlacements(word : Word, cryptogram : Cryptogram){
             }
 
             if(canBePlaced.h){
-                let score = aggregateWordScore(word_length, grid[x][y], 'h', h_fits, cryptogram, [0.7, 0.2, 0.1]);
+                let score = aggregateWordScore(wordLength, grid[x][y], 'h', h_fits, cryptogram, weights);
                 let placement : Placement = {word, start: grid[x][y], orientation:'h', score:score};
 
                 if(horizontalWordPlacements.length > 1){
@@ -199,7 +190,7 @@ function findPossiblePlacements(word : Word, cryptogram : Cryptogram){
             }
 
             if(canBePlaced.v){
-                let score = aggregateWordScore(word_length, grid[x][y], 'v', v_fits, cryptogram, [0.75, 0.15, 0.1]);
+                let score = aggregateWordScore(wordLength, grid[x][y], 'v', v_fits, cryptogram, weights);
                 let placement : Placement = {word, start: grid[x][y], orientation:'v', score:score};
 
                 if(verticalWordPlacements.length > 1) {
@@ -218,7 +209,7 @@ function findPossiblePlacements(word : Word, cryptogram : Cryptogram){
                 else if(verticalWordPlacements.length == 0) verticalWordPlacements = [...verticalWordPlacements, placement]
             }
         }
-        if((h_done) && (v_done)) break;
+        if((h_done) && (v_done)) continue;
     }    
     returnPlacements[0] = horizontalWordPlacements;
     returnPlacements[1] = verticalWordPlacements;
@@ -229,7 +220,8 @@ function aggregateWordScore(word_length : number, start : Cell, orientation: str
     let scores = [
         scoreWordIntersections(word_length, fits),
         scoreWordPuzzleBalance(orientation, cryptogram.horizontalCount, cryptogram.verticalCount),
-        scoreWordCentrality(word_length, start, orientation, cryptogram.width, cryptogram.height)
+        scoreWordCentrality(word_length, start, orientation, cryptogram.width, cryptogram.height),
+        scoreWordLength(word_length, cryptogram.width, cryptogram.height)
     ]
     
     return scores.reduce((r, a, i) => {return r + a * weights[i]}, 0);
@@ -262,15 +254,25 @@ function scoreWordCentrality(length : number, start: Cell, orientation : string,
     return 1 - (distance(middleOfWord, middleOfPuzzle) / max_distance)
 }
 
+function scoreWordLength(length : number, maxX : number, maxY : number){
+    return length / Math.max(maxX, maxY);
+}
+
 function wordPlacementAllowed(word : Word, start : Cell, orientation : string, cryptogram : Cryptogram){
     let allowed = true;
     let fits = 0;
+    let debugWord = false;
 
     if(orientation == 'h'){
         for(let i = 0; i < word.length_total; i++){
             let letter = word.text.charAt(i)
             let content = cryptogram.cells[start.x + i][start.y].content
             let isStartOrEnd = (i == 0 || i+1 == word.length_total) ? true : false;
+
+            if(debugWord){
+                console.log(letter, content, isStartOrEnd, orientation, start.x+i, start.y)
+            }
+
             if(!letterPlacementAllowed(letter, content, orientation, isStartOrEnd)) {
                 allowed = false; 
                 break;
@@ -284,6 +286,10 @@ function wordPlacementAllowed(word : Word, start : Cell, orientation : string, c
             let letter = word.text.charAt(i)
             let content = cryptogram.cells[start.x][start.y + i].content
             let isStartOrEnd = (i == 0 || i+1 == word.length_total) ? true : false;
+
+            if(debugWord){
+                console.log(letter, content, isStartOrEnd, orientation, start.x, start.y+i)
+            }
             if(!letterPlacementAllowed(letter, content, orientation , isStartOrEnd)){ 
                 allowed = false; 
                 break;

@@ -14,10 +14,12 @@ export type Cryptogram = {
 export type Word = {
     id: number, 
     text: string,
-    display : string,  
+    display : string,
+    display_style : string,
     length_clue : number[],
     length_total : number,
     clue : string
+    canPlace : boolean;
 }
 
 export type Cell = {

@@ -18,7 +18,7 @@
         font-family: 'Courier New', Courier, monospace;
     }
     
-    .bordered{
+    :global(.bordered){
         border: 2px dotted;
         
         &.bottom{
@@ -30,21 +30,20 @@
     h1{
         text-align: center;
     }
+
+    :global(.text-black){
+        color : black;
+    }
     
-    .row {
+    :global(.row) {
         display: flex;
     }
     
-    .column {
+    :global(.column) {
         flex: 45%;
         text-align: center;
-        align-content: center;
-        
-        &.middle{
-            display: flex;
-            flex: 10%;
-            align-items: center;
-        }
+        align-content:space-around;
+        padding: 5px 10px;
     }
     
     :global(.cell){
@@ -67,5 +66,13 @@
     :global(.m-1){
         margin: 1rem;
     }
+
+    :global(.h-500){
+        height:500px;
+    }
     
+    :global(body){
+        background-color: black;
+        color: white;
+    }
 </style>
