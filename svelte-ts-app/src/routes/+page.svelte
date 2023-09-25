@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Grid from "./grid.svelte";
-    import Input from './input.svelte';
+    import Grid from "$lib/components/grid.svelte";
+    import Input from '$lib/components/input.svelte';
 </script>
 
     <h1 class="bordered bottom">Cryptogramcreator</h1>

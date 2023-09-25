@@ -1,9 +1,4 @@
-// place files you want to import through the `$lib` alias in this folder.
-import type {  Cryptogram, Word, Cell, Placement } from "./stores";
-
-function distance(point_1 : number[], point_2 : number[]){
-    return Math.sqrt((point_1[0] - point_2[0]) ** 2 + (point_1[1] - point_2[1]) ** 2);
-}
+import type {  Cryptogram, Word, Cell, Placement } from "../stores";
 
 export function initCells(cryptogram : Cryptogram){
     const MAX_X = cryptogram.width - 1;
@@ -33,6 +28,10 @@ export function generatePuzzle(WORDS : Word[], cryptogram : Cryptogram, weights 
         wordsToPlace.splice(wordsToPlace.findIndex((w) => w.id == bestPossiblePlacement.word.id), 1)
     }
     return cryptogram
+}
+
+function distance(point_1 : number[], point_2 : number[]){
+    return Math.sqrt((point_1[0] - point_2[0]) ** 2 + (point_1[1] - point_2[1]) ** 2);
 }
 
 function findBestPossiblePlacement(WORDS : Word[], wordsToPlace : Word[], cryptogram : Cryptogram, weights : number[]){
@@ -134,6 +133,8 @@ function blockFutureVertical(cell : Cell){
         // Else content already is "-" or is another letter: no action needed.
     }
 }
+
+
 function findPossiblePlacements(word : Word, cryptogram : Cryptogram, weights : number[]){
     let grid = cryptogram.cells;
     let wordLength = word.length_total;
@@ -146,8 +147,10 @@ function findPossiblePlacements(word : Word, cryptogram : Cryptogram, weights : 
         h_done = x + wordLength > cryptogram.width;
         for(let y = 0; y < cryptogram.height; y++){
             v_done = y + wordLength > cryptogram.height;
-            //Don't check any further squares if we've reached the edge in both directions
+
+            //Don't check any further squares in this column if the word reaches the edge in both directions
             if((h_done) && (v_done)) continue;
+
             //Do check if at least one of the orientations is still possible            
             else{
                 var h_fits = 0
@@ -176,7 +179,8 @@ function findPossiblePlacements(word : Word, cryptogram : Cryptogram, weights : 
                 if(horizontalWordPlacements.length > 1){
                     for(let i = 0; i < horizontalWordPlacements.length; i++){
                         if(score > horizontalWordPlacements[i].score){ 
-                            horizontalWordPlacements = [...horizontalWordPlacements.slice(0,i), placement, ...horizontalWordPlacements.slice(i)]
+                            horizontalWordPlacements = 
+                            [...horizontalWordPlacements.slice(0,i), placement, ...horizontalWordPlacements.slice(i)]
                             break;
                         }
                     }
@@ -196,7 +200,8 @@ function findPossiblePlacements(word : Word, cryptogram : Cryptogram, weights : 
                 if(verticalWordPlacements.length > 1) {
                     for(let i = 0; i < verticalWordPlacements.length; i++){
                         if(score > verticalWordPlacements[i].score){
-                            verticalWordPlacements = [...verticalWordPlacements.slice(0,i), placement, ...verticalWordPlacements.slice(i)]
+                            verticalWordPlacements = 
+                            [...verticalWordPlacements.slice(0,i), placement, ...verticalWordPlacements.slice(i)]
                             break;
                         }
                     }
@@ -209,12 +214,12 @@ function findPossiblePlacements(word : Word, cryptogram : Cryptogram, weights : 
                 else if(verticalWordPlacements.length == 0) verticalWordPlacements = [...verticalWordPlacements, placement]
             }
         }
-        if((h_done) && (v_done)) continue;
     }    
     returnPlacements[0] = horizontalWordPlacements;
     returnPlacements[1] = verticalWordPlacements;
     return returnPlacements;
 }
+
 
 function aggregateWordScore(word_length : number, start : Cell, orientation: string, fits : number, cryptogram : Cryptogram, weights : number[]){    
     let scores = [
@@ -227,9 +232,11 @@ function aggregateWordScore(word_length : number, start : Cell, orientation: str
     return scores.reduce((r, a, i) => {return r + a * weights[i]}, 0);
 }
 
+
 function scoreWordIntersections(length : number, fits : number){
     return fits / (length / 2);
 }
+
 
 function scoreWordPuzzleBalance(orientation : string, horizontalCount : number, verticalCount : number){
     let score;
@@ -240,6 +247,7 @@ function scoreWordPuzzleBalance(orientation : string, horizontalCount : number, 
     
     return score
 }
+
 
 function scoreWordCentrality(length : number, start: Cell, orientation : string, maxX : number, maxY : number){
     let middleOfPuzzle = [maxX/2, maxY/2]
@@ -254,9 +262,11 @@ function scoreWordCentrality(length : number, start: Cell, orientation : string,
     return 1 - (distance(middleOfWord, middleOfPuzzle) / max_distance)
 }
 
+
 function scoreWordLength(length : number, maxX : number, maxY : number){
     return length / Math.max(maxX, maxY);
 }
+
 
 function wordPlacementAllowed(word : Word, start : Cell, orientation : string, cryptogram : Cryptogram){
     let allowed = true;
@@ -299,8 +309,8 @@ function wordPlacementAllowed(word : Word, start : Cell, orientation : string, c
     }
     else alert("Illegal orientation given in function: wordPlacementAllowed in single-builder.ts")
     return {allowed, fits};
-    
 }
+
 
 function letterPlacementAllowed(letter : string, content : string, orientation : string, isStartOrEnd : boolean){
     let result = 

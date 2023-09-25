@@ -1,6 +1,6 @@
 <script lang="ts">
     import { WORDS, cryptogram } from "$lib/stores";
-    import { initCells, generatePuzzle} from "$lib/single-builder";
+    import { initCells, generatePuzzle} from "$lib/utils/single-builder";
     
     $cryptogram.cells = initCells($cryptogram);
     //Transposition because of having to print within #each statement
