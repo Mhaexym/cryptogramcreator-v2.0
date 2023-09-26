@@ -30,3 +30,6 @@ npm run dev -- --open
 * Knop om cryptogram te downloaden als pdf of png. 
 * Implementatie van fase 3: beschrijvingen toevoegen.
 * Automatisch aanvullende woorden suggereren mbv databank Nederlandse taal. 
+
+#### Lore
+> Cryptogramcreator v2.0 is de tweede versie. De oorspronkelijk cryptogramcreator is van een 16-jarige-ik die het verstandig en het meest gebruiksvriendelijk vond om deze te schrijven als slechte CLI applicatie in python.
