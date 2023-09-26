@@ -1,5 +1,13 @@
 # cryptogram-maker-nl
-Maakt Volkskrant-stijl cryptogrammen uit ingevoerde woorden of een csv aan woorden, met beschrijvingen op variabele grootte van canvassen, gebruikmakend van taalstores van de Nederlandse taal (zonder woorden met illegale tekens).
+Deze Cryptogramcreator is gemaakt om van een lijst woorden automatisch een cryptogram-grid te bouwen.
+
+>>>   Druk op "Genereer grid" om de voorbeeldwoorden in een grid te plaatsen.
+Er zijn momenteel twee grid-constructor algoritmes geimplementeerd. De "Naive Single-shot" pakt telkens het best-scorende woord (zie Score-instellingen) en plaatst die meteen op het grid. Dit klinkt goed, maar kan slechte resultaten opleveren, zoals te zien is bij "NIKS GEKS TE ZIEN".
+
+>>>   Verander het algoritme naar "Breadth First Search", 
+            druk op "Wis grid" en weer op "Genereer grid".
+            
+De "Breadth First Search" genereert eerst alle lengte-2-permutaties van woordvolgordes om de puzzel mee te starten, en bouwt met iedere permutatie vervolgens een puzzel. De beste uit alle verzamelde puzzels wordt gekozen en gepresenteerd. Zo zie je dat er nu inderdaad niks geks meer te zien is.
 
 # create-svelte
 

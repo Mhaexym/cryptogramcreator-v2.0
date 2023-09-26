@@ -1,7 +1,10 @@
 <script lang="ts">
     import { newId, WORDS } from "$lib/stores";
     import type { Cryptogram, Cell, Word } from "$lib/stores";
-    
+
+    let exampleWords = ['hiero','niks geks te zien','voorbeeldwoorden','een paar','gewoon']
+    if($WORDS.length < 1) exampleWords.forEach((word) => addSingleWord(word))
+
     function handleTextInput(event: KeyboardEvent){
         if (event.target){
             const target = event.target as HTMLInputElement;
@@ -13,11 +16,34 @@
             }
         }
     }
+
+
+    function handleCSVInput(event : Event){
+        if (event.target){
+            const target = event.target as HTMLInputElement;
+            if (target.files){
+                let file = target.files[0];
+                let reader = new FileReader();
+                reader.readAsText(file);
+                reader.onload = () => {
+                    var string_result = reader.result as String;
+                    const result_arr = string_result.split("\r\n")
+                    for(let i = 0; i < result_arr.length; i++) {
+                        addSingleWord(result_arr[i]);
+                    }
+                }
+                
+                reader.onerror = () => console.log(reader.error);
+            }
+        }
+    }
+
     
-    function clearAll(){
+    function clearAllWords(){
         $WORDS = []
     }
     
+
     function addSingleWord(word_string : string){
         if(word_string.length > 1){
             let value = word_string.trim().toUpperCase();
@@ -46,9 +72,9 @@
                 id: $newId,
                 text: grid_text,
                 display : value,
-                display_style : "",
-                length_clue : lengths,
-                length_total : grid_length,
+                displayStyle : "",
+                lengthClue : lengths,
+                lengthTotal : grid_length,
                 clue: "",
                 canPlace: true
             }
@@ -57,26 +83,7 @@
             $newId += 1;
         }
     }
-    
-    function handleCSVInput(event : Event){
-        if (event.target){
-            const target = event.target as HTMLInputElement;
-            if (target.files){
-                let file = target.files[0];
-                let reader = new FileReader();
-                reader.readAsText(file);
-                reader.onload = () => {
-                    var string_result = reader.result as String;
-                    const result_arr = string_result.split("\r\n")
-                    for(let i = 0; i < result_arr.length; i++) {
-                        addSingleWord(result_arr[i]);
-                    }
-                }
-                
-                reader.onerror = () => console.log(reader.error);
-            }
-        }
-    }
+
     
     function deleteFile(event : Event){
         var target = event.target as HTMLInputElement
@@ -97,22 +104,23 @@
 <div class="w-100 mh-100 bordered h-500">
     <table class="table_center w-100">
         {#each $WORDS as word}
-        <tr class="w-100" style={word.display_style}>
-            {word.display} ({word.length_clue})
+        <tr class="w-100" style={word.displayStyle}>
+            {word.display} ({word.lengthClue})
             <button on:click="{() => deleteWord(word.id)}" class="float-end">Verwijder</button>
         </tr>
         {/each}
     </table>
 </div>
-<button on:click={clearAll} class="m-1">Alles verwijderen</button>
+<button on:click={clearAllWords} class="m-1">Alles verwijderen</button>
 {/if}
 <div class="row">
     <div class="column">
-        <p>Typ een woord:</p>
-        <input id="input" on:keydown={handleTextInput} type='text' placeholder="Vul een antwoord in..."/>
+        <p>Typ een woord <br/> en druk op ENTER...</p>
+        <input id="input" on:keydown={handleTextInput} type='text' placeholder="Vul een woord in..."/>
     </div>
     <div class="column">
-        <p>Of upload een .CSV file</p>    
+        <p>...of voeg een .CSV file toe<br/>(indien gewenst: klik eerst op alles verwijderen)</p>
+        <p></p>    
         <input type="file" accept=".csv" on:change={handleCSVInput} on:click={deleteFile}/>
     </div>
 </div>
