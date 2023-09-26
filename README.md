@@ -5,7 +5,7 @@ Deze Cryptogramcreator (WIP) is gemaakt om van een lijst woorden automatisch een
 
 ## Uitleg
 ### Hoe run ik Cryptogramcreator?
-Er zit een executable bij het programma, waardoor je deze zonder development-omgeving gewoon kunt runnen met 'cryptogramcreator.exe'. Om te developen, zie [development](#development).
+Er zit een executable bij het programma, waardoor je deze zonder development-omgeving gewoon kunt runnen met 'Cryptogramcreator-v2.0.exe'. Om te developen, zie [development](#development).
 
 ### Hoe werkt Cryptogramcreator? 
 De Cryptogramcreator opent standaard met een paar voorbeeldwoorden, waarvan m.b.v. de verschillende algoritmes een grid kan worden gebouwd. Je kunt deze verwijderen met `Alles verwijderen` en zelf woorden toevoegen door ze handmatig in te voeren en op enter te drukken, nog een woord te typen etc., of door een .CSV file te uploaden met één woord per value. Je kunt met de Score-instellingen spelen om verschillende dingen belangrijker of minder belangrijk te maken bij het maken van een grid en zo het resultaat aanpassen.
