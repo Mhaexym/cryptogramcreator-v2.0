@@ -9,6 +9,7 @@
         <Input/>
         <h2>Uitleg</h2>
         <div style="text-align:left">
+            <a href="https://github.com/Mhaexym/cryptogramcreator-v2.0">Github</a>
             <p>Deze Cryptogramcreator is gemaakt om van een lijst woorden automatisch een cryptogram-grid te bouwen.</p>
             <pre>>>>   Druk op "Genereer grid" om de voorbeeldwoorden in een grid te plaatsen.</pre>
             <p>
