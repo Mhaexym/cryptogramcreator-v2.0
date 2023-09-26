@@ -27,9 +27,13 @@ npm run dev -- --open
 ```
 
 ## Geplande features
+* Geisoleerde woorden/stukken puzzel verwijderen/bestraffen
+* Efficienter BFS algoritme implementeren 
 * Knop om cryptogram te downloaden als pdf of png. 
 * Implementatie van fase 3: beschrijvingen toevoegen.
 * Automatisch aanvullende woorden suggereren mbv databank Nederlandse taal. 
+
+> Het voorlopige doel is om de woorden van een bestaand (VK) cryptogram in te vullen en het zo te laten zijn dat de uitkomst er op z'n minst behoorlijk op lijkt. 
 
 #### Lore
 > Cryptogramcreator v2.0 is de tweede versie. De oorspronkelijk cryptogramcreator is van een 16-jarige-ik die het verstandig en het meest gebruiksvriendelijk vond om deze te schrijven als slechte CLI applicatie in Python. Via de CLI werd je gevraagd woorden in te voeren, maar als je per ongeluk op enter drukte, runde het programma al. "Runnen" was een directe lijn van de input, door alle verwerking en debug-berichten, kale scores en progress-berichten in de CLI - waarbij je wegens CPU-gebruik gedurende anderhalve minuut geen gebruik kon maken van je PC - tot er ineens een pop-up met een cryptogram in rauwe matplotlib tevoorschijn kwam. Zo geschiedde het ooit.
