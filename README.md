@@ -1,50 +1,25 @@
-# cryptogram-maker-nl
-Deze Cryptogramcreator is gemaakt om van een lijst woorden automatisch een cryptogram-grid te bouwen.
+# Cryptogramcreator v2.0 - alpha
+Deze Cryptogramcreator (WIP) is gemaakt om van een lijst woorden automatisch een cryptogram-grid te bouwen. Er zijn momenteel twee grid-constructor algoritmes geimplementeerd. De "Naive Single-shot" pakt telkens het best-scorende woord (zie Score-instellingen) en plaatst die meteen op het grid. De "Breadth First Search" genereert eerst alle lengte-n-permutaties (n=2 alleen intern aanpasbaar, want O(n!)) van woordvolgordes om de puzzel mee te starten, en bouwt met iedere permutatie vervolgens een puzzel. De beste uit alle verzamelde puzzels wordt gekozen en gepresenteerd.
 
-> Druk op "Genereer grid" om de voorbeeldwoorden in een grid te plaatsen.
+## Uitleg
+### Hoe run ik Cryptogramcreator?
+Er zit een executable bij het programma, waardoor je deze zonder development-omgeving gewoon kunt runnen met 'cryptogramcreator.exe'. Om te developen, zie [development](##development)
 
-Er zijn momenteel twee grid-constructor algoritmes geimplementeerd. De "Naive Single-shot" pakt telkens het best-scorende woord (zie Score-instellingen) en plaatst die meteen op het grid. Dit klinkt goed, maar kan slechte resultaten opleveren, zoals te zien is bij "NIKS GEKS TE ZIEN".
+### Hoe werkt Cryptogramcreator? 
+De Cryptogramcreator opent standaard met een paar voorbeeldwoorden, waarvan m.b.v. de verschillende algoritmes een grid kan worden gebouwd. Je kunt deze verwijderen met `Alles verwijderen` en zelf woorden toevoegen door ze handmatig in te voeren en op enter te drukken, nog een woord te typen etc., of door een .CSV file te uploaden met één woord per value. Je kunt met de Score-instellingen spelen om verschillende dingen belangrijker of minder belangrijk te maken bij het maken van een grid en zo het resultaat aanpassen.
+> Woorden uit het lijstje die op het grid zijn geplaatst worden dikgedrukt, en degene die niet geplaatst konden worden, worden doorgehaald. 
 
->>>   Verander het algoritme naar "Breadth First Search", 
-            druk op "Wis grid" en weer op "Genereer grid".
-            
-De "Breadth First Search" genereert eerst alle lengte-2-permutaties van woordvolgordes om de puzzel mee te starten, en bouwt met iedere permutatie vervolgens een puzzel. De beste uit alle verzamelde puzzels wordt gekozen en gepresenteerd. Zo zie je dat er nu inderdaad niks geks meer te zien is.
+### Live-editing
+Door alsmaar naar het grid te kijken en handmatig woorden in te voeren die qua letters goed passen tussen twee of meerdere woorden die er al staan, kun je (behouden wat bugs) een soort live-editing doen. 
 
-# create-svelte
-
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
+### Development
+Cryptogramcreator is geschreven in [Svelte](https://svelte.dev/), Sveltekit & Typescript en runt op [Node.js](https://nodejs.org/en/download). Open 'cryptogram-maker-nl' als project in je favoriete editor (ik raad VSCode aan voor Svelte) en run de volgende commands in je CLI. 
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
+cd svelte-ts-app
+npm install
 npm run dev
 
 # or start the server and open the app in a new browser tab
 npm run dev -- --open
 ```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
