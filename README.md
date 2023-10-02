@@ -12,7 +12,7 @@ De Cryptogramcreator opent standaard met een paar voorbeeldwoorden, waarvan m.b.
 > Woorden uit het lijstje die op het grid zijn geplaatst worden dikgedrukt, en degene die niet geplaatst konden worden, worden doorgehaald. 
 
 ### Live-editing
-Door alsmaar naar het grid te kijken en handmatig woorden in te voeren die qua letters goed passen tussen twee of meerdere woorden die er al staan, kun je (behouden wat bugs) een soort live-editing doen.  
+Middels de 'Update grid' knop, kun je - zonder het huidige cryptogram te wissen - nieuwe woorden erin voegen of nieuwe hoogte of breedte doorvoeren. Dit maakt live-editing mogelijk, waarbij je je voorgebouwde grid kunt afmaken met woorden die erg goed passen. 
 
 ### Development
 Cryptogramcreator is geschreven in [Svelte](https://svelte.dev/), Sveltekit & Typescript en runt op [Node.js](https://nodejs.org/en/download). Open 'cryptogram-maker-nl' als project in je favoriete editor (ik raad VSCode aan voor Svelte) en run de volgende commands in je CLI. 
