@@ -32,7 +32,8 @@ npm run dev -- --open
 * Efficienter BFS algoritme implementeren 
 * Knop om cryptogram te downloaden als pdf of png. 
 * Implementatie van fase 3: beschrijvingen toevoegen.
-* Automatisch aanvullende woorden suggereren mbv databank Nederlandse taal. 
+* Automatisch aanvullende woorden suggereren mbv databank Nederlandse taal.
+* "Weet je zeker?" functionaliteit toevoegen bij wissen bestaand cryptogram.
 
 > Het voorlopige doel is om de woorden van een bestaand (VK) cryptogram in te vullen en het zo te laten zijn dat de uitkomst er op z'n minst behoorlijk op lijkt. 
 
