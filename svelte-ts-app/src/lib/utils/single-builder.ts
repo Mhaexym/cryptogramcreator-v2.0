@@ -186,7 +186,6 @@ function findBestPossiblePlacement(WORDS : Word[], wordsToPlace : Word[], crypto
         // Find all possible placements for the word
         let placements = findPossiblePlacements(wordsToPlace[i], cryptogram, weights);
         allPossibleWordPlacements[wordsToPlace[i].id] = placements;
-        if(wordsToPlace[i].text == "OFPLIM") console.log(...wordsToPlace)
         // Simple 'current better than best?'-loop, checking first whether placements[0] (horizontal)
         // or placements[1] (vertical) are empty. If they're both empty, we flag the word, which will
         // later be used to update the input UI on the page.
