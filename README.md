@@ -27,6 +27,7 @@ npm run dev -- --open
 ```
 
 ## Geplande features
+* Edit-functie voor reeds ingevulde woorden
 * Geisoleerde woorden/stukken puzzel verwijderen/bestraffen
 * Efficienter BFS algoritme implementeren 
 * Knop om cryptogram te downloaden als pdf of png. 
