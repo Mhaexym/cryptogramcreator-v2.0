@@ -319,24 +319,23 @@ function wordPlacementAllowed(word : Word, start : Cell, orientation : string, c
     // Innocent until proven guilty. 
     let placementAllowed = true;
     let fits = 0;
-    
-    // Fill in a word : string here to console-debug this function for a specific word.  
-    let debugWord = false;
-    
+
     // Horizontal explained. 
     if(orientation == 'h'){
         // Loop over letters
         for(let i = 0; i < word.lengthTotal; i++){
-            let letter = word.text.charAt(i)
-            let content = cryptogram.cells[start.x + i][start.y].content
+            let letter = word.text.charAt(i);
+            let content = cryptogram.cells[start.x + i][start.y].content;
             let isStartOrEnd = (i == 0 || i+1 == word.lengthTotal) ? true : false;
-            
-            if(debugWord){
-                console.log(letter, content, isStartOrEnd, orientation, start.x+i, start.y)
-            }
-            
+
+            // Specific edge cases where word-starts or endings are allowed to be placed on "-"; botchy fix.
+            let willAndCanStartOnBlocker = false;
+            let willAndCanEndOnBlocker = false;
+            if(i == 0 && content === '-'){willAndCanStartOnBlocker = ((start.x - 1) > 0)? !isLetter(cryptogram.cells[start.x - 1][start.y].content) : true}
+            if(i+1 == word.lengthTotal && content === '-'){willAndCanEndOnBlocker = ((start.x + i + 1) > cryptogram.width)? !isLetter(cryptogram.cells[start.x + i + 1][start.y].content) : true}
+
             // Stop immediately if letter cannot be placed over content of cell, given orientation & start or end. 
-            if(!letterPlacementAllowed(letter, content, orientation, isStartOrEnd)) {
+            if(!letterPlacementAllowed(letter, content, orientation, isStartOrEnd) && !willAndCanStartOnBlocker && !willAndCanEndOnBlocker) {
                 placementAllowed = false; 
                 break;
             }
@@ -352,8 +351,14 @@ function wordPlacementAllowed(word : Word, start : Cell, orientation : string, c
             let letter = word.text.charAt(i)
             let content = cryptogram.cells[start.x][start.y + i].content
             let isStartOrEnd = (i == 0 || i+1 == word.lengthTotal) ? true : false;
-            if(debugWord) console.log(letter, content, isStartOrEnd, orientation, start.x, start.y+i)
-            if(!letterPlacementAllowed(letter, content, orientation , isStartOrEnd)){ 
+
+            let willAndCanStartOnBlocker = false;
+            let willAndCanEndOnBlocker = false;
+            if(i == 0 && content === '|'){willAndCanStartOnBlocker = ((start.y - 1) > 0)? !isLetter(cryptogram.cells[start.x][start.y - 1].content) : true}
+            if(i+1 == word.lengthTotal && content === '|'){willAndCanEndOnBlocker = ((start.y + i + 1) > cryptogram.height)? !isLetter(cryptogram.cells[start.x][start.y + i + 1].content) : true}
+
+
+            if(!letterPlacementAllowed(letter, content, orientation, isStartOrEnd) && !willAndCanStartOnBlocker && !willAndCanEndOnBlocker) {
                 placementAllowed = false; 
                 break;
             }
@@ -373,10 +378,12 @@ function letterPlacementAllowed(letter : string, content : string, orientation :
     */
     let result = 
     content == "+" ? 
-    false : 
+    false : // Never allowed on "+"
     (orientation == "h" ? 
-    (content === letter || content === "-" && !isStartOrEnd || content === "_") : 
-    (content === letter || content === "|" && !isStartOrEnd || content === "_"))
+    (content === letter || content === "_" || content === "-" && !isStartOrEnd) : // Horizontal allowed in these three cases
+    // orientation == "v"
+    (content === letter || content === "_" || content === "|" && !isStartOrEnd)) // Vertical allowed in these three cases
+
     return result
 }
 
@@ -446,4 +453,8 @@ function scoreWordLength(wordLength : number, MAX_X : number, MAX_Y : number){
 
 function distance(pointA : number[], pointB : number[]){
     return Math.sqrt((pointA[0] - pointB[0]) ** 2 + (pointA[1] - pointB[1]) ** 2);
+}
+
+function isLetter(string : string){
+    return /^[A-Z]$/i.test(string);
 }

@@ -14,15 +14,15 @@
         <h2>Uitleg</h2>
         <div style="text-align:left">
             <p>Deze Cryptogramcreator is gemaakt om van een lijst woorden automatisch een cryptogram-grid te bouwen.</p>
-            <pre>>>>   Druk op "Genereer grid" om de voorbeeldwoorden in een grid te plaatsen.</pre>
+            <p>>>>   Druk op "Genereer grid" om de voorbeeldwoorden in een grid te plaatsen.</p>
             <p>
                 Er zijn momenteel twee grid-constructor algoritmes geimplementeerd. De "Naive Single-shot" pakt 
                 telkens het best-scorende woord (zie Score-instellingen) en plaatst die meteen op het grid. Dit klinkt goed, 
                 maar kan slechte resultaten opleveren, zoals te zien is bij "NIKS GEKS TE ZIEN".
             </p>
-            <pre>>>>   Verander het algoritme naar "Breadth First Search", 
+            <p>>>>   Verander het algoritme naar "Breadth First Search", 
                 druk op "Wis grid" en weer op "Genereer grid".
-            </pre>
+            </p>
             <p>
                 De "Breadth First Search"
                 genereert eerst alle lengte-2-permutaties van woordvolgordes om de puzzel mee te starten, en bouwt met iedere permutatie vervolgens een puzzel. De beste uit alle

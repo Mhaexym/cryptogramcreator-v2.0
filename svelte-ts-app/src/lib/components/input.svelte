@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { newId, WORDS } from "$lib/stores";
+    import { newId, INPUT_WORDS } from "$lib/stores";
     import type { Cryptogram, Cell, Word } from "$lib/stores";
 
     let exampleWords = ['hiero','niks geks te zien','voorbeeldwoorden','een paar','gewoon']
-    if($WORDS.length < 1) exampleWords.forEach((word) => addSingleWord(word))
+    if($INPUT_WORDS.length < 1) exampleWords.forEach((word) => addSingleWord(word))
 
     function handleTextInput(event: KeyboardEvent){
         if (event.target){
@@ -40,7 +40,7 @@
 
     
     function clearAllWords(){
-        $WORDS = []
+        $INPUT_WORDS = []
     }
     
 
@@ -79,7 +79,7 @@
                 canPlace: true
             }
             // Update words
-            $WORDS = [word, ...$WORDS];
+            $INPUT_WORDS = [word, ...$INPUT_WORDS];
             $newId += 1;
         }
     }
@@ -92,18 +92,18 @@
     
     function deleteWord(id : number){
         // Remove word from words-dict by id
-        let wordIndex = $WORDS.findIndex(word => word.id == id)
-        $WORDS.splice(wordIndex, 1);
-        $WORDS = $WORDS;
+        let wordIndex = $INPUT_WORDS.findIndex(word => word.id == id)
+        $INPUT_WORDS.splice(wordIndex, 1);
+        $INPUT_WORDS = $INPUT_WORDS;
     }
     
 </script>
 
 <h2>Input</h2>
-{#if $WORDS.length}
+{#if $INPUT_WORDS.length}
 <div class="w-100 mh-100 bordered h-500">
     <table class="table_center w-100">
-        {#each $WORDS as word}
+        {#each $INPUT_WORDS as word}
         <tr class="w-100 text-center" style={word.displayStyle}>
             {word.display} ({word.lengthClue})
             <button on:click="{() => deleteWord(word.id)}" class="float-end">Verwijder</button>

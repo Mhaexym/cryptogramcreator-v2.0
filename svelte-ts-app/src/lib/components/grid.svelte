@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { WORDS, cryptogram, weights } from "$lib/stores";
+    import { INPUT_WORDS, GRID_WORDS, cryptogram, weights } from "$lib/stores";
     import { emptyPuzzle, fillPuzzle} from "$lib/utils/single-builder";
     import { fillpuzzleBFS } from "$lib/utils/bfs-builder";
     import { tick } from "svelte";
@@ -23,24 +23,35 @@
     
     $: maxCellsWide < gridWidth? gridWidth = maxCellsWide : 0;
     $: maxCellsHigh < gridHeight? gridHeight = maxCellsHigh : 0;
-    
-    $: $cryptogram = emptyPuzzle($cryptogram);
+
     
     function handleGenerate(){
         $cryptogram.width = gridWidth;
         $cryptogram.height = gridHeight;
         $cryptogram = emptyPuzzle($cryptogram);
-        syncLegalityToWords();
+        syncLegalityToInput();
         if(algo == 'NSS'){
-            $cryptogram = fillPuzzle($WORDS, $cryptogram, $weights)
+            $cryptogram = fillPuzzle($INPUT_WORDS, $cryptogram, $weights)
             printable_grid = $cryptogram.cells[0].map((_, colIndex) => $cryptogram.cells.map(row => row[colIndex]));
-            syncLegalityToWords();
+            $GRID_WORDS = $INPUT_WORDS
+            syncLegalityToInput();
         }
         else if(algo == 'BFS'){
-            $cryptogram = fillpuzzleBFS($WORDS, 3, $weights, $cryptogram)
+            $cryptogram = fillpuzzleBFS($INPUT_WORDS, 3, $weights, $cryptogram)
             printable_grid = $cryptogram.cells[0].map((_, colIndex) => $cryptogram.cells.map(row => row[colIndex]));
-            syncLegalityToWords();
+            $GRID_WORDS = $INPUT_WORDS
+            syncLegalityToInput();
         }
+    }
+
+    function handleUpdate(){
+        $cryptogram.width = gridWidth;
+        $cryptogram.height = gridHeight;
+        let newWords = $INPUT_WORDS.filter((w) => !$GRID_WORDS.includes(w))
+        $cryptogram = fillPuzzle(newWords, $cryptogram, $weights)
+        printable_grid = $cryptogram.cells[0].map((_, colIndex) => $cryptogram.cells.map(row => row[colIndex]));
+        $GRID_WORDS = $INPUT_WORDS
+        syncLegalityToInput();
     }
     
     function clearGrid(){
@@ -48,18 +59,18 @@
         $cryptogram.height = gridHeight;
         $cryptogram = emptyPuzzle($cryptogram);
         printable_grid = $cryptogram.cells[0].map((_, colIndex) => $cryptogram.cells.map(row => row[colIndex]));
-        syncLegalityToWords();
+        syncLegalityToInput();
     }
     
-    function syncLegalityToWords(){
+    function syncLegalityToInput(){
         let puzzleHasWords = Object.keys($cryptogram.wordPlacements).length > 0;
-        for(let i = 0; i < $WORDS.length; i++){
+        for(let i = 0; i < $INPUT_WORDS.length; i++){
             if(puzzleHasWords){
-                $WORDS[i].canPlace ?  $WORDS[i].displayStyle = "font-weight:bold;" : $WORDS[i].displayStyle = 'text-decoration: line-through';
+                $INPUT_WORDS[i].canPlace ?  $INPUT_WORDS[i].displayStyle = "font-weight:bold;" : $INPUT_WORDS[i].displayStyle = 'text-decoration: line-through';
             }
             else{
-                $WORDS[i].canPlace = true;
-                $WORDS[i].displayStyle = ""
+                $INPUT_WORDS[i].canPlace = true;
+                $INPUT_WORDS[i].displayStyle = ""
             }
         }
     }
@@ -103,6 +114,7 @@
         </div>
     </fieldset>
     <button class="m-1" on:click|preventDefault={handleGenerate}>Genereer grid</button>
+    <button class="m-1" on:click|preventDefault={handleUpdate}>Update grid</button>
     <button class="m-1" on:click|preventDefault={clearGrid}>Wis grid</button>
 </div>
 <h2>Score-instellingen</h2>

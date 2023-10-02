@@ -38,7 +38,9 @@ export type Placement = {
     fits : number
 }
 
-export const WORDS = writable<Word[]>([]);
+export const INPUT_WORDS = writable<Word[]>([]);
+export const GRID_WORDS = writable<Word[]>([]);
+
 export var cryptogram = writable<Cryptogram>({
     width: 16,
     height: 22,
