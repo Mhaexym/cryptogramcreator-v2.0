@@ -10,20 +10,20 @@
     let gridContainerHeight : number;
     let maxCellsWide : number; 
     let maxCellsHigh : number;
-
+    
     $cryptogram.width = gridWidth;
     $cryptogram.height = gridHeight;
     $cryptogram = emptyPuzzle($cryptogram);
     let algo : string = 'NSS';
     //Transposition because of having to print within #each statement
     let printable_grid = $cryptogram.cells[0].map((_, colIndex) => $cryptogram.cells.map(row => row[colIndex]));
-
+    
     $: maxCellsWide = Math.floor(gridContainerWidth / 22);
     $: maxCellsHigh = Math.floor(gridContainerHeight / 22);
     
     $: maxCellsWide < gridWidth? gridWidth = maxCellsWide : 0;
     $: maxCellsHigh < gridHeight? gridHeight = maxCellsHigh : 0;
-
+    
     
     function handleGenerate(){
         $cryptogram.width = gridWidth;
@@ -43,7 +43,7 @@
             syncLegalityToInput();
         }
     }
-
+    
     function handleUpdate(){
         $cryptogram.width = gridWidth;
         $cryptogram.height = gridHeight;
@@ -131,14 +131,15 @@ D
     <p>De score voor de plaatsing van een woord in het generatieproces is vierdelig, waarvan het belang van elk deel wordt bepaald door
         een weight. De score wordt daarmee als volgt berekend:
     </p>
-    <pre>
-        totaalscore = A * score_A + B * score_B + C * score_C + D * score_D
-        
-        waarbij:
-        score_A = belang van het maken van letterverbindingen ("interacties") met andere woorden
-        score_B = belang van de balans tussen verticale en horizontale woorden in de gehele puzzel
-        score_C = belang van hoezeer een woord middenin de puzzel ligt
-        score_D = belang van hoe lang een woord is ten opzichte van de maximaal mogelijke lengte binnen de puzzel
-    </pre>
+    <p>
+        totaalscore = A * score_A + B * score_B + C * score_C + D * score_D <br/><br/>
+        waarbij: 
+    </p>
+    <p style="margin-left:25px">
+        score_A = belang van het maken van letterverbindingen ("fits") met andere woorden <br/>
+        score_B = belang van de balans tussen verticale en horizontale woorden in de gehele puzzel <br/>
+        score_C = belang van hoezeer een woord middenin de puzzel ligt <br/>
+        score_D = belang van hoe lang een woord is ten opzichte van de maximaal mogelijke lengte binnen de puzzel <br/>
+    </p>
 </div>
 

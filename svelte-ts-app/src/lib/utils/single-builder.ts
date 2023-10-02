@@ -331,8 +331,8 @@ function wordPlacementAllowed(word : Word, start : Cell, orientation : string, c
             // Specific edge cases where word-starts or endings are allowed to be placed on "-"; botchy fix.
             let willAndCanStartOnBlocker = false;
             let willAndCanEndOnBlocker = false;
-            if(i == 0 && content === '-'){willAndCanStartOnBlocker = ((start.x - 1) > 0)? !isLetter(cryptogram.cells[start.x - 1][start.y].content) : true}
-            if(i+1 == word.lengthTotal && content === '-'){willAndCanEndOnBlocker = ((start.x + i + 1) > cryptogram.width)? !isLetter(cryptogram.cells[start.x + i + 1][start.y].content) : true}
+            if(i == 0 && content === '-'){willAndCanStartOnBlocker = ((start.x - 1) >= 0)? !isLetter(cryptogram.cells[start.x - 1][start.y].content) : true}
+            if(i+1 == word.lengthTotal && content === '-'){willAndCanEndOnBlocker = ((start.x + i + 1) < cryptogram.width)? !isLetter(cryptogram.cells[start.x + i + 1][start.y].content) : true}
 
             // Stop immediately if letter cannot be placed over content of cell, given orientation & start or end. 
             if(!letterPlacementAllowed(letter, content, orientation, isStartOrEnd) && !willAndCanStartOnBlocker && !willAndCanEndOnBlocker) {
@@ -354,8 +354,8 @@ function wordPlacementAllowed(word : Word, start : Cell, orientation : string, c
 
             let willAndCanStartOnBlocker = false;
             let willAndCanEndOnBlocker = false;
-            if(i == 0 && content === '|'){willAndCanStartOnBlocker = ((start.y - 1) > 0)? !isLetter(cryptogram.cells[start.x][start.y - 1].content) : true}
-            if(i+1 == word.lengthTotal && content === '|'){willAndCanEndOnBlocker = ((start.y + i + 1) > cryptogram.height)? !isLetter(cryptogram.cells[start.x][start.y + i + 1].content) : true}
+            if(i == 0 && content === '|'){willAndCanStartOnBlocker = ((start.y - 1) >= 0)? !isLetter(cryptogram.cells[start.x][start.y - 1].content) : true}
+            if(i+1 == word.lengthTotal && content === '|'){willAndCanEndOnBlocker = ((start.y + i + 1) < cryptogram.height)? !isLetter(cryptogram.cells[start.x][start.y + i + 1].content) : true}
 
 
             if(!letterPlacementAllowed(letter, content, orientation, isStartOrEnd) && !willAndCanStartOnBlocker && !willAndCanEndOnBlocker) {
