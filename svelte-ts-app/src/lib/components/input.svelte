@@ -104,7 +104,7 @@
 <div class="w-100 mh-100 bordered h-500">
     <table class="table_center w-100">
         {#each $WORDS as word}
-        <tr class="w-100" style={word.displayStyle}>
+        <tr class="w-100 text-center" style={word.displayStyle}>
             {word.display} ({word.lengthClue})
             <button on:click="{() => deleteWord(word.id)}" class="float-end">Verwijder</button>
         </tr>

@@ -2,13 +2,35 @@
     import { WORDS, cryptogram, weights } from "$lib/stores";
     import { emptyPuzzle, fillPuzzle} from "$lib/utils/single-builder";
     import { fillpuzzleBFS } from "$lib/utils/bfs-builder";
+    import { tick } from "svelte";
     
-    let algo : string = 'NSS';
+    let gridWidth  : number = 16;
+    let gridHeight : number = 22;
+    let gridContainerWidth : number;
+    let gridContainerHeight : number;
+    let maxCellsWide : number; 
+    let maxCellsHigh : number;
+
+    $cryptogram.width = gridWidth;
+    $cryptogram.height = gridHeight;
     $cryptogram = emptyPuzzle($cryptogram);
+    let algo : string = 'NSS';
     //Transposition because of having to print within #each statement
     let printable_grid = $cryptogram.cells[0].map((_, colIndex) => $cryptogram.cells.map(row => row[colIndex]));
+
+    $: maxCellsWide = Math.floor(gridContainerWidth / 22);
+    $: maxCellsHigh = Math.floor(gridContainerHeight / 22);
+    
+    $: maxCellsWide < gridWidth? gridWidth = maxCellsWide : 0;
+    $: maxCellsHigh < gridHeight? gridHeight = maxCellsHigh : 0;
+    
+    $: $cryptogram = emptyPuzzle($cryptogram);
     
     function handleGenerate(){
+        $cryptogram.width = gridWidth;
+        $cryptogram.height = gridHeight;
+        $cryptogram = emptyPuzzle($cryptogram);
+        syncLegalityToWords();
         if(algo == 'NSS'){
             $cryptogram = fillPuzzle($WORDS, $cryptogram, $weights)
             printable_grid = $cryptogram.cells[0].map((_, colIndex) => $cryptogram.cells.map(row => row[colIndex]));
@@ -22,11 +44,13 @@
     }
     
     function clearGrid(){
+        $cryptogram.width = gridWidth;
+        $cryptogram.height = gridHeight;
         $cryptogram = emptyPuzzle($cryptogram);
         printable_grid = $cryptogram.cells[0].map((_, colIndex) => $cryptogram.cells.map(row => row[colIndex]));
         syncLegalityToWords();
     }
-
+    
     function syncLegalityToWords(){
         let puzzleHasWords = Object.keys($cryptogram.wordPlacements).length > 0;
         for(let i = 0; i < $WORDS.length; i++){
@@ -44,7 +68,7 @@
 
 
 <h2>Grid</h2>
-<div class="bordered h-500">
+<div class="bordered h-500" bind:clientWidth={gridContainerWidth} bind:clientHeight={gridContainerHeight}>
     <table class="table_center text-black">
         {#each printable_grid as crypto_row}
         <tr>
@@ -65,6 +89,17 @@
         <div>
             <input type="radio" id="BFS" name="algo" value="BFS" bind:group={algo}/>
             <label for="BFS">Breadth-first-search (langzamer, beter)</label>
+        </div>
+    </fieldset>
+    <fieldset class="row">
+        <legend>Gridgrootte</legend>
+        <div class="column" style="float:left">
+            <label for="width" class=d-block>Breedte</label>
+            <label for="height" class=d-block>Hoogte</label>
+        </div>
+        <div class="column" style="float:left; width:auto">
+            <input type="number" id="width" min=5 max={maxCellsWide} bind:value={gridWidth} class=d-block/>
+            <input type="number" id="height" min=5 max={maxCellsHigh} bind:value={gridHeight} class=d-block/>
         </div>
     </fieldset>
     <button class="m-1" on:click|preventDefault={handleGenerate}>Genereer grid</button>

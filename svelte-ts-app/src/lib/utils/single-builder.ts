@@ -47,7 +47,6 @@ export function fillPuzzle(words : Word[], cryptogram : Cryptogram, weights : nu
         
         // Select best placement according to scores*weights of all words in all possible places
         let bestPossiblePlacement = findBestPossiblePlacement(words, wordsToPlace, cryptogram, weights);
-        
         // Imprint the best placement with its word on the cryptogram
         cryptogram = confirmPlacement(bestPossiblePlacement, cryptogram);
         
@@ -187,7 +186,7 @@ function findBestPossiblePlacement(WORDS : Word[], wordsToPlace : Word[], crypto
         // Find all possible placements for the word
         let placements = findPossiblePlacements(wordsToPlace[i], cryptogram, weights);
         allPossibleWordPlacements[wordsToPlace[i].id] = placements;
-        
+        if(wordsToPlace[i].text == "OFPLIM") console.log(...wordsToPlace)
         // Simple 'current better than best?'-loop, checking first whether placements[0] (horizontal)
         // or placements[1] (vertical) are empty. If they're both empty, we flag the word, which will
         // later be used to update the input UI on the page.
@@ -204,8 +203,6 @@ function findBestPossiblePlacement(WORDS : Word[], wordsToPlace : Word[], crypto
     }
     return bestPossiblePlacement
 }
-
-
 
 
 export function findPossiblePlacements(word : Word, cryptogram : Cryptogram, weights : number[]){

@@ -3,13 +3,16 @@
     import Input from '$lib/components/input.svelte';
 </script>
 
-<div class="title bordered bottom"><div class="title_item"></div><h1 class="title_item">Cryptogramcreator v2.0</h1><div class="title_item name">door Maxim Gehlmann</div></div>
+<div class="title bordered bottom">
+    <div class="title_item"></div>
+    <h1 class="title_item">Cryptogramcreator v2.0</h1>
+    <div class="title_item name"><p><a href="https://github.com/Mhaexym/cryptogramcreator-v2.0">Github</a>  <br/> door Maxim Gehlmann</p></div>
+</div>
 <div class="row">
-    <div class="column">
+    <div class="column space_around">
         <Input/>
         <h2>Uitleg</h2>
         <div style="text-align:left">
-            <a href="https://github.com/Mhaexym/cryptogramcreator-v2.0">Github</a>
             <p>Deze Cryptogramcreator is gemaakt om van een lijst woorden automatisch een cryptogram-grid te bouwen.</p>
             <pre>>>>   Druk op "Genereer grid" om de voorbeeldwoorden in een grid te plaatsen.</pre>
             <p>
@@ -18,7 +21,7 @@
                 maar kan slechte resultaten opleveren, zoals te zien is bij "NIKS GEKS TE ZIEN".
             </p>
             <pre>>>>   Verander het algoritme naar "Breadth First Search", 
-            druk op "Wis grid" en weer op "Genereer grid".
+                druk op "Wis grid" en weer op "Genereer grid".
             </pre>
             <p>
                 De "Breadth First Search"
@@ -27,7 +30,7 @@
             </p>
         </div>
     </div>
-    <div class="column">
+    <div class="column space_around">
         <Grid/>
     </div>
 </div>
@@ -35,6 +38,27 @@
 <style>
     *{
         font-family: 'Courier New', Courier, monospace;
+        box-sizing: border-box;
+    }
+    
+    .title{
+        display: flex;
+        justify-items: baseline;
+    }
+    
+    .title_item{
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        
+        &.name{
+            justify-content: end;
+            align-items: end;
+        }
+    }
+    
+    :global(h1, h2){
+        text-align: center;
     }
     
     :global(.bordered){
@@ -45,25 +69,17 @@
             border-bottom: 2px dotted;
         }
     }
-
-    .title{
-        display: flex;
-        justify-items: baseline;
-    }
-
-    .title_item{
-        display: flex;
-        flex: 1;
-        justify-content: center;
-
-        &.name{
-            justify-content: end;
-            align-items: end;
-        }
-    }
     
     :global(.text-black){
         color : black;
+    }
+    
+    :global(.text-left){
+        text-align : left;
+    }
+    
+    :global(.text-center){
+        text-align : center;
     }
     
     :global(.row) {
@@ -71,10 +87,13 @@
     }
     
     :global(.column) {
-        flex: 45%;
-        text-align: center;
-        align-content:space-around;
+        max-width: 50%;
         padding: 5px 10px;
+    }
+    
+    
+    :global(.space_around){
+        align-content:space-around;
     }
     
     :global(.cell){
@@ -83,10 +102,15 @@
         width: 20px;
         padding: 0;
         margin: -2px;
+        text-align: center;
         
         &:hover{
             background: black;
         }
+    }
+    
+    :global(.d-block){
+        display: block;
     }
     
     :global(.table_center){
